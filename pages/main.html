@@ -1,72 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" tabindex="0">
 <head>
-    <meta charset="utf-8">
-    <title>Sigrid TTT Timer</title>
-    <link rel="stylesheet" href="css/main.css">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
+
+    <title>TTT Timer</title>
+
+    <script type="module" src="src/main.mjs"></script>
+        <link rel="stylesheet" href="/pages/css/common.css"/>
+    <style>
+            html.solid-background {
+                background: var(--background-color);
+            }
+            html.solid-background body {
+                background: transparent !important;
+            }
+            body {
+                overflow: hidden !important; /* Hide scrollbars */
+            }
+			#header {
+				text-align: center;
+			}
+            #act_cda{
+                display: flex;
+                justify-content: center;
+                align-items: baseline;
+                font-size: calc(2rem + 40vw);
+                font-weight: 800;
+            }
+            #pullDraftTable
+            {
+                border-collapse: collapse;
+                font-variant-numeric: tabular-nums;
+            }
+            td.current
+            {
+                text-align: center;
+                font-size: larger;
+            }
+            td.history
+            {
+                text-align: center;
+                font-size: smaller;
+            }
+            td.accumDuration
+            {
+                text-align: center;
+                font-size: smaller;
+                font-style: italic;
+            }
+        </style>
+
 </head>
 <body>
-    <!-- Settings Panel (hidden by default) -->
-    <div id="settings-panel" class="hidden">
-        <div class="settings-content">
-            <button class="close-btn" id="close-settings-btn">×</button>
-            <h2>Settings</h2>
-            <form id="settings-form">
-                <div class="form-group">
-                    <label for="opacity-slider">
-                        Panel Opacity:
-                        <span class="tooltip" data-tooltip="Adjust the transparency of the panel background">?</span>
-                    </label>
-                    <div class="slider-container">
-                        <input type="range" id="opacity-slider" name="opacity-slider" min="0" max="100" step="5" />
-                        <span id="opacity-value">80%</span>
-                    </div>
+    <body>
+        <div id="titlebar">
+            <header>
+                <div class="logo"><img title="icon" src="/pages/images/icon128.png"/></div>
+                <div class="title">TTT Timer</div>
+                <div class="buttons">
+                    <a class="button open-settings" href="./settings.html?width=380&height=720&child-window"
+                    title="Open settings window" target="gradient-settings"><ms>settings</ms></a>
+                    <div title="Minimize" class="button minimize electron-only"><ms>minimize</ms></div>
+                    <div title="Close this window" class="button close electron-only"><ms>close</ms></div>
                 </div>
-
-                <div class="form-group">
-                    <label for="refresh-interval">
-                        Auto-Refresh Interval (seconds):
-                        <span class="tooltip" data-tooltip="Automatically refresh the page every X seconds (0 = disabled)">?</span>
-                    </label>
-                    <input type="number" id="refresh-interval" name="refresh-interval" min="0" step="30" />
-                </div>
-
-                <div class="form-group">
-                    <label for="zoom-level">
-                        Zoom Level (%):
-                        <span class="tooltip" data-tooltip="Adjust the zoom level of the embedded page">?</span>
-                    </label>
-                    <input type="number" id="zoom-level" name="zoom-level" min="50" max="200" step="10" />
-                </div>
-
-                <div class="form-group">
-                    <label for="header-visible">
-                        Show Header:
-                        <span class="tooltip" data-tooltip="Toggle the visibility of the header bar">?</span>
-                    </label>
-                    <input type="checkbox" id="header-visible" name="header-visible" />
-                </div>
-
-                <button class="header-btn" id="save-settings-btn" type="button">Save Settings</button>
-            </form>
+            </header>
         </div>
-    </div>
-
-    <div class="container">
-        <header class="app-header" id="app-header">
-            <h1>Sigrid TTT Timer</h1>
-            <div class="window-controls">
-                <button class="window-control-btn" id="settings-btn">⚙</button>
-                <button class="window-control-btn window-control-close" id="close-btn">×</button>
-            </div>
-        </header>
-        <main class="app-main">
-            <iframe class="mainframe" id="mainframe" src="https://sigrid.ttt-timer.com"></iframe>
-        </main>
-    </div>
-    <div class="resize-handle"></div>
-
-    <script src="src/main.mjs" type="module"></script>
-    <script src="src/window-controls.js" type="module"></script>
-</body>
+        <div id="content">
+<!-- 			<table id="pullDraftTable">
+                <tr>
+                    <th colspan=2>Pull</th>
+                    <th colspan=2>Recover</th>
+                </tr>
+                <tr>
+                    <td id="pullDuration" class="current">-</td>
+                    <td id="pullAvgPower" class="current">-</td>
+                    <td id="draftDuration" class="current">-</td>
+                    <td id="draftAvgPower" class="current">-</td>
+                </tr>
+            </table>
+ -->        </div>
+        </div>
+        <div id="hintbar">
+            <div class="hint"></div>
+        </div>
+    </body>
 </html>

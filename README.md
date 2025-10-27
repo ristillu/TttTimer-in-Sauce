@@ -1,8 +1,6 @@
 # Sigrid TTT Timer - Sauce for Zwift Mod
 
-A Sauce for Zwift mod that embeds the Sigrid TTT Timer (https://sigrid.ttt-timer.com) as an overlay panel in Zwift.
-
-![Sigrid TTT Timer Panel](https://via.placeholder.com/600x400?text=Sigrid+TTT+Timer+Panel)
+A Sauce for Zwift mod that embeds the Sigrid/Sigmund/Skidbladnir/Blitz/FUBAR TTT Timer (e.g. https://sigrid.ttt-timer.com) as an overlay panel in Zwift.
 
 ## Features
 
@@ -44,7 +42,7 @@ Documents
 ```
 
 3. Restart Sauce for Zwift
-4. The "Sigrid TTT Timer" panel should now be available in your Sauce windows
+4. The "TTT Timer" panel should now be available in your Sauce windows
 
 ## Usage
 

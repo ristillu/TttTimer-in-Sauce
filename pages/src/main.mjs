@@ -1,182 +1,82 @@
 import * as common from '/pages/src/common.mjs';
 
-/* ===============================
-   Configuration settings keys
-   =============================== */
-const OPACITY_KEY = 'panelOpacity';
-const REFRESH_INTERVAL_KEY = 'refreshInterval';
-const ZOOM_LEVEL_KEY = 'zoomLevel';
-const HEADER_VISIBLE_KEY = 'headerVisible';
+const doc = document.documentElement;
+//const L = sauce.locale;
+//const H = L.human;
+//const num = H.number;
 
-/* ===============================
-   Global variables
-   =============================== */
-let panelOpacity = parseInt(common.settingsStore.get(OPACITY_KEY)) || 80;
-let refreshInterval = parseInt(common.settingsStore.get(REFRESH_INTERVAL_KEY)) || 0;
-let zoomLevel = parseInt(common.settingsStore.get(ZOOM_LEVEL_KEY)) || 100;
-let headerVisible = common.settingsStore.get(HEADER_VISIBLE_KEY);
-if (headerVisible === null || headerVisible === undefined) {
-    headerVisible = true;
-} else {
-    headerVisible = headerVisible === "true";
-}
+//const page = location.pathname.split('/').at(-1).split('.')[0];
 
-let refreshIntervalId = null;
+//const defaultPullPowerThreshold = 0;
+//const defaultMinDuration = 7;
+//const defaultShowAccumulatedStatistics = false;
+//const defaultShowWkg = false;
+//const defaultHideUnit = false;
 
-/* ===============================
-   DOM references
-   =============================== */
-const settingsBtn = document.getElementById('settings-btn');
-const settingsPanel = document.getElementById('settings-panel');
-const closeSettingsBtn = document.getElementById('close-settings-btn');
-const saveSettingsBtn = document.getElementById('save-settings-btn');
-const settingsForm = document.getElementById('settings-form');
 
-const opacitySlider = document.getElementById('opacity-slider');
-const opacityValue = document.getElementById('opacity-value');
-const refreshIntervalInput = document.getElementById('refresh-interval');
-const zoomLevelInput = document.getElementById('zoom-level');
-const headerVisibleCheckbox = document.getElementById('header-visible');
 
-const container = document.querySelector('.container');
-const mainframe = document.getElementById('mainframe');
-const appHeader = document.getElementById('app-header');
+common.settingsStore.setDefault({
+    overlayMode: false,
+    solidBackground: false,
+    backgroundColor: '#00ff00',
+    TttTimerUrl: 'https://sigrid.ttt-timer.com'
+    //minDuration: defaultMinDuration,
+    //pullPowerThreshold: defaultPullPowerThreshold,
+    //showAccumulatedStatistics: defaultShowAccumulatedStatistics,
+    //showWkg: defaultShowWkg,
+    //hideUnit: defaultHideUnit
+});
 
-/* ===============================
-   Apply settings to UI
-   =============================== */
-function applySettings() {
-    // Apply opacity
-    if (container) {
-        const bgOpacity = panelOpacity / 100;
-        container.style.backgroundColor = `rgba(18, 18, 18, ${bgOpacity})`;
-    }
-
-    // Apply zoom level to iframe
-    if (mainframe) {
-        mainframe.style.zoom = `${zoomLevel}%`;
-    }
-
-    // Apply header visibility
-    if (appHeader) {
-        appHeader.style.display = headerVisible ? 'flex' : 'none';
-    }
-
-    // Setup auto-refresh
-    if (refreshIntervalId) {
-        clearInterval(refreshIntervalId);
-        refreshIntervalId = null;
-    }
-
-    if (refreshInterval > 0 && mainframe) {
-        refreshIntervalId = setInterval(() => {
-            mainframe.src = mainframe.src;
-        }, refreshInterval * 1000);
+let overlayMode;
+if (window.isElectron) {
+    overlayMode = !!window.electron.context.spec.overlay;
+    doc.classList.toggle('overlay-mode', overlayMode);
+    document.querySelector('#titlebar').classList.toggle('always-visible', overlayMode !== true);
+    if (common.settingsStore.get('overlayMode') !== overlayMode) {
+        // Sync settings to our actual window state, not going to risk updating the window now
+        common.settingsStore.set('overlayMode', overlayMode);
     }
 }
 
-/* ===============================
-   Settings Panel Logic
-   =============================== */
-function initSettingsPanel() {
-    if (settingsBtn) {
-        settingsBtn.addEventListener('click', () => {
-            if (!settingsPanel) return;
-            settingsPanel.classList.remove('hidden');
+function render() {
+    doc.style.setProperty('--font-scale', common.settingsStore.get('fontScale') || 1);
+}
 
-            // Populate form with current settings
-            if (opacitySlider) {
-                opacitySlider.value = panelOpacity;
-            }
-            if (opacityValue) {
-                opacityValue.textContent = `${panelOpacity}%`;
-            }
-            if (refreshIntervalInput) {
-                refreshIntervalInput.value = refreshInterval;
-            }
-            if (zoomLevelInput) {
-                zoomLevelInput.value = zoomLevel;
-            }
-            if (headerVisibleCheckbox) {
-                headerVisibleCheckbox.checked = headerVisible;
-            }
-        });
-    }
-
-    if (closeSettingsBtn) {
-        closeSettingsBtn.addEventListener('click', () => {
-            if (settingsPanel) {
-                settingsPanel.classList.add('hidden');
-            }
-        });
-    }
-
-    // Update opacity value display when slider moves
-    if (opacitySlider && opacityValue) {
-        opacitySlider.addEventListener('input', (e) => {
-            opacityValue.textContent = `${e.target.value}%`;
-        });
-    }
-
-    if (saveSettingsBtn) {
-        saveSettingsBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (!settingsForm) return;
-
-            const formData = new FormData(settingsForm);
-
-            // Save opacity
-            const newOpacity = parseInt(formData.get('opacity-slider'));
-            if (!isNaN(newOpacity)) {
-                panelOpacity = newOpacity;
-                common.settingsStore.set(OPACITY_KEY, panelOpacity.toString());
-            }
-
-            // Save refresh interval
-            const newRefresh = parseInt(formData.get('refresh-interval'));
-            if (!isNaN(newRefresh)) {
-                refreshInterval = newRefresh;
-                common.settingsStore.set(REFRESH_INTERVAL_KEY, refreshInterval.toString());
-            }
-
-            // Save zoom level
-            const newZoom = parseInt(formData.get('zoom-level'));
-            if (!isNaN(newZoom)) {
-                zoomLevel = newZoom;
-                common.settingsStore.set(ZOOM_LEVEL_KEY, zoomLevel.toString());
-            }
-
-            // Save header visibility
-            if (headerVisibleCheckbox) {
-                headerVisible = headerVisibleCheckbox.checked;
-                common.settingsStore.set(HEADER_VISIBLE_KEY, headerVisible.toString());
-            }
-
-            // Apply settings immediately
-            applySettings();
-
-            // Close settings panel
-            if (settingsPanel) {
-                settingsPanel.classList.add('hidden');
-            }
-
-            console.log('Settings saved successfully');
-        });
+function setBackground() {
+    const {solidBackground, backgroundColor} = common.settingsStore.get();
+    doc.classList.toggle('solid-background', !!solidBackground);
+    if (solidBackground) {
+        doc.style.setProperty('--background-color', backgroundColor);
+    } else {
+        doc.style.removeProperty('--background-color');
     }
 }
 
-/* ===============================
-   Main initialization
-   =============================== */
-async function main() {
-    console.log("Sauce Version:", await common.rpc.getVersion());
+export async function main() {
+    common.initInteractionListeners();
+
+    common.settingsStore.addEventListener('changed', async ev => {
+        const changed = ev.data.changed;
+        if (changed.has('solidBackground') || changed.has('backgroundColor')) {
+            setBackground();
+        }
+        if (window.isElectron && changed.has('overlayMode')) {
+            await common.rpc.updateWindow(window.electron.context.id,
+                {overlay: changed.get('overlayMode')});
+            await common.rpc.reopenWindow(window.electron.context.id);
+        }
+        render();
+    });
+
+    setBackground();
+    render();
     
-    // Initialize settings panel
-    initSettingsPanel();
-    
-    // Apply saved settings on load
-    applySettings();
+    //const resetBtn = document.querySelector('.button.reset');
+    //resetBtn.addEventListener('click', reset);
 }
 
-// Start the application
-main();
+export async function settingsMain() {
+    common.initInteractionListeners();
+    //await common.initSettingsForm('form#general')();
+}
+

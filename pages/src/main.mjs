@@ -1,30 +1,14 @@
 import * as common from '/pages/src/common.mjs';
 
 const doc = document.documentElement;
-//const L = sauce.locale;
-//const H = L.human;
-//const num = H.number;
 
-//const page = location.pathname.split('/').at(-1).split('.')[0];
-
-//const defaultPullPowerThreshold = 0;
-//const defaultMinDuration = 7;
-//const defaultShowAccumulatedStatistics = false;
-//const defaultShowWkg = false;
-//const defaultHideUnit = false;
-
-
+//const defaultTttTimerUrl = 'https://sigrid.ttt-timer.com';
 
 common.settingsStore.setDefault({
     overlayMode: false,
     solidBackground: false,
     backgroundColor: '#00ff00',
-    TttTimerUrl: 'https://sigrid.ttt-timer.com'
-    //minDuration: defaultMinDuration,
-    //pullPowerThreshold: defaultPullPowerThreshold,
-    //showAccumulatedStatistics: defaultShowAccumulatedStatistics,
-    //showWkg: defaultShowWkg,
-    //hideUnit: defaultHideUnit
+    //tttTimerUrl: defaultTttTimerUrl
 });
 
 let overlayMode;
@@ -33,7 +17,6 @@ if (window.isElectron) {
     doc.classList.toggle('overlay-mode', overlayMode);
     document.querySelector('#titlebar').classList.toggle('always-visible', overlayMode !== true);
     if (common.settingsStore.get('overlayMode') !== overlayMode) {
-        // Sync settings to our actual window state, not going to risk updating the window now
         common.settingsStore.set('overlayMode', overlayMode);
     }
 }
@@ -52,6 +35,14 @@ function setBackground() {
     }
 }
 
+function updateIframeUrl() {
+    const iframe = document.getElementById('tttTimerFrame');
+    if (iframe) {
+        //const url = common.settingsStore.get('tttTimerUrl') || defaultTttTimerUrl;
+        //iframe.src = url;
+    }
+}
+
 export async function main() {
     common.initInteractionListeners();
 
@@ -65,18 +56,18 @@ export async function main() {
                 {overlay: changed.get('overlayMode')});
             await common.rpc.reopenWindow(window.electron.context.id);
         }
+        if (changed.has('tttTimerUrl')) {
+            updateIframeUrl();
+        }
         render();
     });
 
     setBackground();
     render();
-    
-    //const resetBtn = document.querySelector('.button.reset');
-    //resetBtn.addEventListener('click', reset);
+    updateIframeUrl();
 }
 
 export async function settingsMain() {
     common.initInteractionListeners();
-    //await common.initSettingsForm('form#general')();
+    await common.initSettingsForm('form#general')();
 }
-

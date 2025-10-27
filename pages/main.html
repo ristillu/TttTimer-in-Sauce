@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" tabindex="0">
+<html lang="en" tabindex="0" data-settings-key="ttt-timer-settings-v1">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -8,82 +8,47 @@
     <title>TTT Timer</title>
 
     <script type="module" src="src/main.mjs"></script>
-        <link rel="stylesheet" href="/pages/css/common.css"/>
+    <link rel="stylesheet" href="/pages/css/common.css"/>
     <style>
-            html.solid-background {
-                background: var(--background-color);
-            }
-            html.solid-background body {
-                background: transparent !important;
-            }
-            body {
-                overflow: hidden !important; /* Hide scrollbars */
-            }
-			#header {
-				text-align: center;
-			}
-            #act_cda{
-                display: flex;
-                justify-content: center;
-                align-items: baseline;
-                font-size: calc(2rem + 40vw);
-                font-weight: 800;
-            }
-            #pullDraftTable
-            {
-                border-collapse: collapse;
-                font-variant-numeric: tabular-nums;
-            }
-            td.current
-            {
-                text-align: center;
-                font-size: larger;
-            }
-            td.history
-            {
-                text-align: center;
-                font-size: smaller;
-            }
-            td.accumDuration
-            {
-                text-align: center;
-                font-size: smaller;
-                font-style: italic;
-            }
-        </style>
-
+        html.solid-background {
+            background: var(--background-color);
+        }
+        html.solid-background body {
+            background: transparent !important;
+        }
+        body {
+            overflow: hidden !important;
+            margin: 0;
+            padding: 0;
+        }
+        #content {
+            width: 100%;
+            height: calc(100vh - 40px); /* Adjust based on header height */
+            padding: 0;
+            margin: 0;
+        }
+        #tttTimerFrame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-    <body>
-        <div id="titlebar">
-            <header>
-                <div class="logo"><img title="icon" src="/pages/images/icon128.png"/></div>
-                <div class="title">TTT Timer</div>
-                <div class="buttons">
-                    <a class="button open-settings" href="./settings.html?width=380&height=720&child-window"
-                    title="Open settings window" target="gradient-settings"><ms>settings</ms></a>
-                    <div title="Minimize" class="button minimize electron-only"><ms>minimize</ms></div>
-                    <div title="Close this window" class="button close electron-only"><ms>close</ms></div>
-                </div>
-            </header>
-        </div>
-        <div id="content">
-<!-- 			<table id="pullDraftTable">
-                <tr>
-                    <th colspan=2>Pull</th>
-                    <th colspan=2>Recover</th>
-                </tr>
-                <tr>
-                    <td id="pullDuration" class="current">-</td>
-                    <td id="pullAvgPower" class="current">-</td>
-                    <td id="draftDuration" class="current">-</td>
-                    <td id="draftAvgPower" class="current">-</td>
-                </tr>
-            </table>
- -->        </div>
-        </div>
-        <div id="hintbar">
-            <div class="hint"></div>
-        </div>
-    </body>
+    <div id="titlebar">
+        <header>
+            <div class="logo"><img title="icon" src="/pages/images/icon128.png"/></div>
+            <div class="title">TTT Timer</div>
+            <div class="buttons">
+                <a class="button open-settings" href="./settings.html?width=380&height=400&child-window"
+                   title="Open settings window" target="ttt-timer-settings"><ms>settings</ms></a>
+                <div title="Minimize" class="button minimize electron-only"><ms>minimize</ms></div>
+                <div title="Close this window" class="button close electron-only"><ms>close</ms></div>
+            </div>
+        </header>
+    </div>
+    <div id="content">
+        <!-- <iframe id="tttTimerFrame" src="https://sigrid.ttt-timer.com"></iframe> -->
+    </div>
+</body>
 </html>

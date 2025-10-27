@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Sigrid TTT Timer</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Settings Panel (hidden by default) -->
+    <div id="settings-panel" class="hidden">
+        <div class="settings-content">
+            <button class="close-btn" id="close-settings-btn">×</button>
+            <h2>Settings</h2>
+            <form id="settings-form">
+                <div class="form-group">
+                    <label for="opacity-slider">
+                        Panel Opacity:
+                        <span class="tooltip" data-tooltip="Adjust the transparency of the panel background">?</span>
+                    </label>
+                    <div class="slider-container">
+                        <input type="range" id="opacity-slider" name="opacity-slider" min="0" max="100" step="5" />
+                        <span id="opacity-value">80%</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="refresh-interval">
+                        Auto-Refresh Interval (seconds):
+                        <span class="tooltip" data-tooltip="Automatically refresh the page every X seconds (0 = disabled)">?</span>
+                    </label>
+                    <input type="number" id="refresh-interval" name="refresh-interval" min="0" step="30" />
+                </div>
+
+                <div class="form-group">
+                    <label for="zoom-level">
+                        Zoom Level (%):
+                        <span class="tooltip" data-tooltip="Adjust the zoom level of the embedded page">?</span>
+                    </label>
+                    <input type="number" id="zoom-level" name="zoom-level" min="50" max="200" step="10" />
+                </div>
+
+                <div class="form-group">
+                    <label for="header-visible">
+                        Show Header:
+                        <span class="tooltip" data-tooltip="Toggle the visibility of the header bar">?</span>
+                    </label>
+                    <input type="checkbox" id="header-visible" name="header-visible" />
+                </div>
+
+                <button class="header-btn" id="save-settings-btn" type="button">Save Settings</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <header class="app-header" id="app-header">
+            <h1>Sigrid TTT Timer</h1>
+            <div class="window-controls">
+                <button class="window-control-btn" id="settings-btn">⚙</button>
+                <button class="window-control-btn window-control-close" id="close-btn">×</button>
+            </div>
+        </header>
+        <main class="app-main">
+            <iframe class="mainframe" id="mainframe" src="https://sigrid.ttt-timer.com"></iframe>
+        </main>
+    </div>
+    <div class="resize-handle"></div>
+
+    <script src="src/main.mjs" type="module"></script>
+    <script src="src/window-controls.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+    "manifest_version": 1,
+    "name": "Sigrid TTT Timer",
+    "description": "TTT Timer Panel for Zwift",
+    "author": "Your Name",
+    "website_url": "https://sigrid.ttt-timer.com",
+    "version": "1.0.0",
+    "content_js": [],
+    "content_css": [],
+    "web_root": "pages",
+    "windows": [{
+        "file": "pages/main.html",
+        "id": "sigrid-ttt-timer",
+        "name": "Sigrid TTT Timer",
+        "description": "TTT Timer Panel",
+        "always_visible": false,
+        "overlay": true,
+        "frame": false,
+        "default_bounds": {
+            "width": 450,
+            "height": 660,
+            "x": 100,
+            "y": 100
+        }
+    }]
+}
